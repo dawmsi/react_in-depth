@@ -6,11 +6,17 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import About from "./routes/About.tsx";
 import Movies from "./routes/Movies.tsx";
+import { Provider } from "react-redux";
+import store from "./store.ts";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <Provider store={store}>
+        <App />
+      </Provider>
+    ),
     children: [
       {
         path: "/",
