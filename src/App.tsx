@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
-import Root from "./routes/root";
+import Navigation from "./routes/Navigation";
 
 const App = () => {
   return (
     <div className="min-h-screen bg-gray-600 text-white flex flex-col">
       <header className="w-full flex p-3 bg-gray-800 justify-center">
-        <Root />
+        <Navigation />
       </header>
       <main className="flex-1 p-3">
         <Outlet />

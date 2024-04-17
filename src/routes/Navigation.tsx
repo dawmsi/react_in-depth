@@ -6,7 +6,7 @@ const navigation = [
   { name: "About", path: "/about" },
 ];
 
-export default function Root() {
+export default function Navigation() {
   return (
     <nav>
       <ul className="flex gap-2 flex-wrap">

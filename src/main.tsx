@@ -4,8 +4,8 @@ import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./index.css";
-import About from "./features/About/About.tsx";
-import Movies from "./pages/Movies.tsx";
+import About from "./routes/About.tsx";
+import Movies from "./routes/Movies.tsx";
 
 const router = createBrowserRouter([
   {
