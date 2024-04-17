@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Action, Reducer } from "redux";
 
 export interface Movie {
   id?: number;
+  poster_path?: string;
   title: string;
-  popular: number;
+  popularity: number;
   overview: string;
 }
 
@@ -13,15 +15,15 @@ interface MoviesState {
 
 const initialState: MoviesState = {
   top: [
-    { title: "film1", popular: 98, overview: "Dramma" },
-    { title: "film2", popular: 97, overview: "horror" },
-    { title: "fil3", popular: 96, overview: "triller" },
-    { title: "dasdhkj", popular: 95, overview: "comedy" },
+    { title: "film1", popularity: 98, overview: "Dramma" },
+    { title: "film2", popularity: 97, overview: "horror" },
+    { title: "fil3", popularity: 96, overview: "triller" },
+    { title: "dasdhkj", popularity: 95, overview: "comedy" },
   ],
 };
 
 const moviesReducer: Reducer<MoviesState, Action> = (state, action) => {
-  console.log(state, action);
+  /*   console.log(state, action); */
   return initialState;
 };
 
