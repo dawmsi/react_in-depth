@@ -1,33 +1,32 @@
+import { useEffect } from "react";
 import MovieCard from "./MovieCard";
-/* import { Movie } from "../../reducers/movies"; */
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { RootState } from "../../store";
-import { useEffect, useState } from "react";
 import { client } from "../../api/tmdb";
-import { Movie } from "../../reducers/movies";
-/* 
+import { Movie, moviesLoaded } from "../../reducers/movies";
+
 interface MoviesProps {
   movies: Movie[];
-} */
+}
 
-function Movies() {
-  const [movies, setMovies] = useState<Movie[]>([]);
+function Movies({ movies }: MoviesProps) {
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function loadData() {
       const results = await client.getNowPlaying();
-      setMovies(results);
-      console.log(results);
+      dispatch(moviesLoaded(results));
     }
 
     loadData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <ul className="flex flex-wrap gap-2">
-      {movies.map(({ id, title, popularity, overview, poster_path }) => (
-        <article key={id}>
+      {movies.map(({ title, popularity, overview, poster_path, id = 0 }, index) => (
+        <article key={`${index}${id}`}>
           <MovieCard
+            key={"card" + id}
             title={title}
             popularity={popularity}
             overview={overview}

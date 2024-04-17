@@ -22,9 +22,30 @@ const initialState: MoviesState = {
   ],
 };
 
-const moviesReducer: Reducer<MoviesState, Action> = (state, action) => {
-  /*   console.log(state, action); */
-  return initialState;
+export const moviesLoaded = (movies: Movie[]) => ({
+  type: "movies/loaded",
+  payload: movies,
+});
+
+interface ActionWithPayload<T> extends Action {
+  payload: T;
+}
+
+const moviesReducer: Reducer<MoviesState, ActionWithPayload<Movie[]>> = (
+  state,
+  action
+) => {
+  const currentState = state ?? initialState;
+
+  switch (action.type) {
+    case "movies/loaded":
+      return {
+        ...currentState,
+        top: action.payload,
+      };
+    default:
+      return currentState;
+  }
 };
 
 export default moviesReducer;
