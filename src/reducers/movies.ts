@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { client } from "../api/tmdb";
 import { ActionWithPayload, createReducer } from "../redux/utils";
+import { AppThunk } from "../store";
 
 export interface Movie {
   id?: number;
@@ -11,26 +13,44 @@ export interface Movie {
 
 interface MoviesState {
   top: Movie[];
+  loading: boolean;
 }
 
 const initialState: MoviesState = {
-  top: [
-    { title: "film1", popularity: 98, overview: "Dramma" },
-    { title: "film2", popularity: 97, overview: "horror" },
-    { title: "film3", popularity: 96, overview: "comedy" },
-  ],
+  top: [],
+  loading: false,
 };
 
-export const moviesLoaded = (movies: Movie[]) => ({
+const moviesLoaded = (movies: Movie[]) => ({
   type: "movies/loaded",
   payload: movies,
 });
+
+const moviesLoading = () => ({
+  type: "movies/loading",
+});
+
+export function fetchMovies(): AppThunk<Promise<void>> {
+  return async (dispatch) => {
+    dispatch(moviesLoading());
+
+    const results = await client.getNowPlaying();
+    dispatch(moviesLoaded(results));
+  };
+}
 
 const moviesReducer = createReducer<MoviesState>(initialState, {
   "movies/loaded": (state, action: ActionWithPayload<Movie[]>) => {
     return {
       ...state,
       top: action.payload,
+      loading: false,
+    };
+  },
+  "movies/loading": (state) => {
+    return {
+      ...state,
+      loading: true,
     };
   },
 });
