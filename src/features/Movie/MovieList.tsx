@@ -17,6 +17,7 @@ function Movies() {
     async function loadData() {
       const results = await client.getNowPlaying();
       setMovies(results);
+      console.log(results);
     }
 
     loadData();
@@ -24,8 +25,8 @@ function Movies() {
 
   return (
     <ul className="flex flex-wrap gap-2">
-      {movies.map(({ title, popularity, overview, poster_path }, index) => (
-        <article key={index}>
+      {movies.map(({ id, title, popularity, overview, poster_path }) => (
+        <article key={id}>
           <MovieCard
             title={title}
             popularity={popularity}
