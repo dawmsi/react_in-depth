@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Action, Reducer } from "redux";
+import { ActionWithPayload, createReducer } from "../redux/utils";
 
 export interface Movie {
   id?: number;
@@ -17,8 +17,7 @@ const initialState: MoviesState = {
   top: [
     { title: "film1", popularity: 98, overview: "Dramma" },
     { title: "film2", popularity: 97, overview: "horror" },
-    { title: "fil3", popularity: 96, overview: "triller" },
-    { title: "dasdhkj", popularity: 95, overview: "comedy" },
+    { title: "film3", popularity: 96, overview: "comedy" },
   ],
 };
 
@@ -27,10 +26,18 @@ export const moviesLoaded = (movies: Movie[]) => ({
   payload: movies,
 });
 
-interface ActionWithPayload<T> extends Action {
-  payload: T;
-}
+const moviesReducer = createReducer<MoviesState>(initialState, {
+  "movies/loaded": (state, action: ActionWithPayload<Movie[]>) => {
+    return {
+      ...state,
+      top: action.payload,
+    };
+  },
+});
 
+export default moviesReducer;
+
+/* 
 const moviesReducer: Reducer<MoviesState, ActionWithPayload<Movie[]>> = (
   state,
   action
@@ -46,6 +53,4 @@ const moviesReducer: Reducer<MoviesState, ActionWithPayload<Movie[]>> = (
     default:
       return currentState;
   }
-};
-
-export default moviesReducer;
+}; */
