@@ -1,5 +1,5 @@
-import { combineReducers } from "redux";
-import moviesReducer from "./movies.ts";
+import { combineReducers } from 'redux';
+import moviesReducer from './movies.ts';
 
 const rootReducer = combineReducers({
   movies: moviesReducer,

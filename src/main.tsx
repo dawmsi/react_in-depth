@@ -1,22 +1,22 @@
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
-import "./index.css";
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import './index.css';
 
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import About from "./routes/About.tsx";
-import Movies from "./routes/Movies.tsx";
-import { Provider } from "react-redux";
-import store from "./store.ts";
+import About from './routes/About.tsx';
+import Movies from './routes/Movies.tsx';
+import { Provider } from 'react-redux';
+import store from './store.ts';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: (
       <Provider store={store}>
         <App />
@@ -24,22 +24,22 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/",
+        path: '/',
         element: <div>Hero</div>,
       },
       {
-        path: "/movies",
+        path: '/movies',
         element: <Movies />,
       },
       {
-        path: "/about",
+        path: '/about',
         element: <About />,
       },
     ],
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>

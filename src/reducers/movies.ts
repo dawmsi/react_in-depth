@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { client } from "../api/tmdb";
-import { ActionWithPayload, createReducer } from "../redux/utils";
-import { AppThunk } from "../store";
+import { client } from '../api/tmdb';
+import { ActionWithPayload, createReducer } from '../redux/utils';
+import { AppThunk } from '../store';
 
 export interface Movie {
   id?: number;
@@ -22,12 +22,12 @@ const initialState: MoviesState = {
 };
 
 const moviesLoaded = (movies: Movie[]) => ({
-  type: "movies/loaded",
+  type: 'movies/loaded',
   payload: movies,
 });
 
 const moviesLoading = () => ({
-  type: "movies/loading",
+  type: 'movies/loading',
 });
 
 export function fetchMovies(): AppThunk<Promise<void>> {
@@ -40,14 +40,14 @@ export function fetchMovies(): AppThunk<Promise<void>> {
 }
 
 const moviesReducer = createReducer<MoviesState>(initialState, {
-  "movies/loaded": (state, action: ActionWithPayload<Movie[]>) => {
+  'movies/loaded': (state, action: ActionWithPayload<Movie[]>) => {
     return {
       ...state,
       top: action.payload,
       loading: false,
     };
   },
-  "movies/loading": (state) => {
+  'movies/loading': (state) => {
     return {
       ...state,
       loading: true,
