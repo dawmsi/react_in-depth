@@ -1,17 +1,41 @@
-import { Outlet } from "react-router-dom";
-import Navigation from "./routes/Navigation";
+import { Outlet } from 'react-router-dom';
+import Navigation from './routes/Navigation';
+import {
+  AppBar,
+  Container,
+  CssBaseline,
+  ThemeProvider,
+  Toolbar,
+  Typography,
+  createTheme,
+} from '@mui/material';
+
+import LiveTvOutlinedIcon from '@mui/icons-material/LiveTvOutlined';
+import { deepPurple } from '@mui/material/colors';
+
+const defaultTheme = createTheme({
+  palette: {
+    primary: deepPurple,
+  },
+});
 
 const App = () => {
   return (
-    <div className="min-h-screen bg-gray-600 text-white flex flex-col">
-      <header className="w-full flex p-3 bg-gray-800 justify-center">
-        <Navigation />
-      </header>
-      <main className="flex-1 p-3">
+    <ThemeProvider theme={defaultTheme}>
+      <CssBaseline />
+      <AppBar>
+        <Toolbar component="nav">
+          <LiveTvOutlinedIcon sx={{ mr: 2 }} />
+          <Typography variant="h6" color="inherit">
+            React Adven
+          </Typography>
+          <Navigation />
+        </Toolbar>
+      </AppBar>
+      <Container component="main" sx={{ p: 2, mt: '64px' }}>
         <Outlet />
-      </main>
-      <footer className="w-full p-3 justify-center flex bg-gray-700">footer</footer>
-    </div>
+      </Container>
+    </ThemeProvider>
   );
 };
 

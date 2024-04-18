@@ -1,3 +1,4 @@
+import { Link } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
 const navigation = [
@@ -8,16 +9,20 @@ const navigation = [
 
 export default function Navigation() {
   return (
-    <nav>
-      <ul className="flex gap-2 flex-wrap">
+      <ul className="flex gap-2 flex-wrap mx-3">
         {navigation.map(({ name, path }, index) => (
           <li key={index}>
-            <NavLink className="[&.active]:text-gray-50 [&.active]:underline" to={path}>
+            <Link
+              to={path}
+              component={NavLink}
+              variant="button"
+              color="inherit"
+              className=" [&.active]:text-gray-300"
+            >
               {name}
-            </NavLink>
+            </Link>
           </li>
         ))}
       </ul>
-    </nav>
   );
 }

@@ -1,11 +1,14 @@
-import MovieList from "../features/Movie/MovieList";
+import { Typography } from '@mui/material';
+import MovieList from '../features/Movie/MovieList';
 
 const Movies = () => {
   return (
-    <section>
-      <h1 className="mb-2 text-center">Movies</h1>
+    <>
+      <Typography variant="h3" sx={{ mb: 1 }}>
+        Movies
+      </Typography>
       <MovieList />
-    </section>
+    </>
   );
 };
 
