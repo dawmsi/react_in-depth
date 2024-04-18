@@ -7,10 +7,10 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
-import About from './routes/About.tsx';
+import Home from './routes/Home.tsx';
 import Movies from './routes/Movies.tsx';
+import About from './routes/About.tsx';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store.ts';
 
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <div>Hero</div>,
+        element: <Home />,
       },
       {
         path: '/movies',
