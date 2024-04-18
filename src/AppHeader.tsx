@@ -1,4 +1,11 @@
-import { AppBar, Button, Stack, Toolbar, Typography } from '@mui/material';
+import {
+  AppBar,
+  Button,
+  Container,
+  Stack,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import LiveTvOutlinedIcon from '@mui/icons-material/LiveTvOutlined';
 import Navigation from './routes/Navigation';
 import { useContext } from 'react';
@@ -17,20 +24,22 @@ interface AuthHeaderProps {
 const AppHeader = ({ onLogin, onLogout }: AuthHeaderProps) => {
   return (
     <AppBar>
-      <Toolbar component="nav">
-        <LiveTvOutlinedIcon sx={{ mr: 2 }} />
-        <Typography variant="h6" color="inherit">
-          React Adven
-        </Typography>
-        <Stack
-          flexGrow={1}
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between">
-          <Navigation />
-          <AuthSection onLogin={onLogin} onLogout={onLogout} />
-        </Stack>
-      </Toolbar>
+      <Container maxWidth="xl">
+        <Toolbar component="nav">
+          <LiveTvOutlinedIcon sx={{ mr: 2 }} />
+          <Typography variant="h6" color="inherit">
+            React Adven
+          </Typography>
+          <Stack
+            flexGrow={1}
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between">
+            <Navigation />
+            <AuthSection onLogin={onLogin} onLogout={onLogout} />
+          </Stack>
+        </Toolbar>
+      </Container>
     </AppBar>
   );
 };
