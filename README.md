@@ -1,8 +1,8 @@
 # React in-depth by ITVDN
 
-## React + TypeScript + Vite
+## `React` + `Redux` + TypeScript + Vite + MaterialUI + Tailwind
 
-- [x] №1 Створення проєкту. TypeScript. Типізація в React
++ [x] №1 Створення проєкту. TypeScript. Типізація в React
 - [x] №2 Стилізація. Частина 1
 - [x] №3 Стилізація. Частина 2
 - [x] №4 Практика 1. Робота з API і стилізація
