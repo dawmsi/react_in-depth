@@ -7,7 +7,7 @@ export function CountdownVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    videoRef.current?.play();
+    videoRef && videoRef.current?.play();
   }, []);
 
   function togglePlaying(): void {
