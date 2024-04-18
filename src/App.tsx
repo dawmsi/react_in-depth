@@ -32,7 +32,7 @@ const App = () => {
       <AuthContext.Provider value={auth}>
         <AppHeader
           onLogin={() => setAuth(fakeAuth)}
-          onLogout={() => setAuth(fakeAuth)}
+          onLogout={() => setAuth({ user: AnonymousUser })}
         />
         <Container component="main" sx={{ p: 2, mt: '64px' }}>
           <Outlet />
