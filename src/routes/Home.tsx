@@ -7,6 +7,7 @@ const Home = () => {
   const { user } = useContext(AuthContext);
   const loggedIn = user !== AnonymousUser;
   const greeting = loggedIn ? `Hi ${user.name}!` : `Hi ghost!`;
+  throw new Error('tests class comp error hanldler');
 
   return (
     <Box sx={{ py: 8 }}>

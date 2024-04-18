@@ -13,13 +13,16 @@ import About from './routes/About.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store.ts';
+import ErrorBoundary from './ErrorBoundary.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
       <Provider store={store}>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </Provider>
     ),
     children: [
