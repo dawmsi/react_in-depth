@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import MovieCard from './MovieCard';
 import { connect } from 'react-redux';
 import { RootState } from '../../store';
 import { Movie, fetchMovies } from '../../reducers/movies';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { Container, Grid } from '@mui/material';
+import { AnonymousUser, AuthContext } from '../../AppContext';
 
 interface MoviesProps {
   movies: Movie[];
@@ -14,6 +15,9 @@ interface MoviesProps {
 // eslint-disable-next-line react-refresh/only-export-components
 function Movies({ movies, loading }: MoviesProps) {
   const dispatch = useAppDispatch();
+
+  const { user } = useContext(AuthContext);
+  const loggedIn = user !== AnonymousUser;
 
   useEffect(() => {
     dispatch(fetchMovies());
@@ -37,6 +41,7 @@ function Movies({ movies, loading }: MoviesProps) {
                   popularity={popularity}
                   overview={overview}
                   poster_path={poster_path}
+                  enableUserActions={loggedIn}
                 />
               </Grid>
             )

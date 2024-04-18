@@ -1,7 +1,13 @@
 import { Box, Button, Container, Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { AnonymousUser, AuthContext } from '../AppContext';
 
 const Home = () => {
+  const { user } = useContext(AuthContext);
+  const loggedIn = user !== AnonymousUser;
+  const greeting = loggedIn ? `Hi ${user.name}!` : `Hi ghost!`;
+
   return (
     <Box sx={{ py: 8 }}>
       <Container maxWidth="sm">
@@ -9,7 +15,7 @@ const Home = () => {
           Welcome
         </Typography>
         <Typography align="center" variant="h5" paragraph>
-          Explore movies
+          {greeting}
         </Typography>
         <Stack
           marginTop={4}

@@ -1,17 +1,15 @@
 import { Outlet } from 'react-router-dom';
-import Navigation from './routes/Navigation';
 import {
-  AppBar,
   Container,
   CssBaseline,
   ThemeProvider,
-  Toolbar,
-  Typography,
   createTheme,
 } from '@mui/material';
 
-import LiveTvOutlinedIcon from '@mui/icons-material/LiveTvOutlined';
 import { deepPurple } from '@mui/material/colors';
+import AppHeader from './AppHeader';
+import { AnonymousUser, AuthContext, AuthInfo } from './AppContext';
+import { useState } from 'react';
 
 const defaultTheme = createTheme({
   palette: {
@@ -20,21 +18,26 @@ const defaultTheme = createTheme({
 });
 
 const App = () => {
+  const [auth, setAuth] = useState<AuthInfo>({ user: AnonymousUser });
+
+  const fakeAuth = {
+    user: {
+      name: 'Matiew',
+    },
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <AppBar>
-        <Toolbar component="nav">
-          <LiveTvOutlinedIcon sx={{ mr: 2 }} />
-          <Typography variant="h6" color="inherit">
-            React Adven
-          </Typography>
-          <Navigation />
-        </Toolbar>
-      </AppBar>
-      <Container component="main" sx={{ p: 2, mt: '64px' }}>
-        <Outlet />
-      </Container>
+      <AuthContext.Provider value={auth}>
+        <AppHeader
+          onLogin={() => setAuth(fakeAuth)}
+          onLogout={() => setAuth(fakeAuth)}
+        />
+        <Container component="main" sx={{ p: 2, mt: '64px' }}>
+          <Outlet />
+        </Container>
+      </AuthContext.Provider>
     </ThemeProvider>
   );
 };

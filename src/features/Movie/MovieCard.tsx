@@ -4,12 +4,25 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { Movie } from '../../reducers/movies';
 import { Link as RouterLink } from 'react-router-dom';
+import { Favorite } from '@mui/icons-material';
 
-const MovieCard = ({ id, title, popularity, overview, poster_path }: Movie) => {
+interface MovieProps extends Movie {
+  enableUserActions?: boolean;
+}
+
+const MovieCard = ({
+  id,
+  title,
+  popularity,
+  overview,
+  poster_path,
+  enableUserActions,
+}: MovieProps) => {
   return (
     <Card>
       <CardMedia
@@ -37,6 +50,13 @@ const MovieCard = ({ id, title, popularity, overview, poster_path }: Movie) => {
             color="secondary">
             Details
           </Button>
+          {enableUserActions && (
+            <Tooltip title="Add to favorite">
+              <Button>
+                <Favorite />
+              </Button>
+            </Tooltip>
+          )}
         </CardActions>
       </CardContent>
     </Card>
