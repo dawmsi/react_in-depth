@@ -1,6 +1,7 @@
 import { Container, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { CountdownVideo } from '../CountdownVideo';
+import MapView from '../MapView';
 
 const About = () => {
   const [countdown, setCountdown] = useState(9);
@@ -28,6 +29,7 @@ const About = () => {
         Comimg soon: {countdown}
       </Typography>
       <CountdownVideo />
+      <MapView />
     </Container>
   );
 };

@@ -18,6 +18,7 @@
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
     "@redux-devtools/extension": "^3.3.0",
+    "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.1",
@@ -26,6 +27,7 @@
     "redux-thunk": "^3.1.0"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.11",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
