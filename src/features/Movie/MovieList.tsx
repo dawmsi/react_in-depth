@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { RootState } from '../../store';
 import { Movie, fetchMovies } from '../../reducers/movies';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, LinearProgress } from '@mui/material';
 import { AnonymousUser, AuthContext } from '../../AppContext';
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
 interface MoviesProps {
   movies: Movie[];
@@ -19,9 +20,13 @@ function Movies({ movies, loading }: MoviesProps) {
   const { user } = useContext(AuthContext);
   const loggedIn = user !== AnonymousUser;
 
+  const [targetRef, entry] = useIntersectionObserver();
+
   useEffect(() => {
-    dispatch(fetchMovies());
-  }, [dispatch]);
+    if (entry?.isIntersecting) {
+      dispatch(fetchMovies());
+    }
+  }, [dispatch, entry?.isIntersecting]);
 
   return (
     <Container sx={{ px: 8 }} maxWidth="xl">
@@ -30,23 +35,28 @@ function Movies({ movies, loading }: MoviesProps) {
           <span className="animate-spin text-2xl">{`M`}</span>
         </div>
       ) : (
-        <Grid container spacing={4}>
-          {movies.map(
-            ({ title, popularity, overview, poster_path, id = 0 }, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={`${index}${id}`}>
-                <MovieCard
-                  key={'card' + id}
-                  id={id}
-                  title={title}
-                  popularity={popularity}
-                  overview={overview}
-                  poster_path={poster_path}
-                  enableUserActions={loggedIn}
-                />
-              </Grid>
-            )
-          )}
-        </Grid>
+        <>
+          <Grid container spacing={4}>
+            {movies.map(
+              ({ title, popularity, overview, poster_path, id = 0 }, index) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={`${index}${id}`}>
+                  <MovieCard
+                    key={'card' + id}
+                    id={id}
+                    title={title}
+                    popularity={popularity}
+                    overview={overview}
+                    poster_path={poster_path}
+                    enableUserActions={loggedIn}
+                  />
+                </Grid>
+              )
+            )}
+          </Grid>
+          <div ref={targetRef}>
+            <LinearProgress color="secondary" sx={{ mt: 3 }} />
+          </div>
+        </>
       )}
     </Container>
   );

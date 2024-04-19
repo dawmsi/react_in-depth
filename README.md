@@ -7,8 +7,8 @@
 - [x] №3 Стилізація. Частина 2
 - [x] №4 Практика 1. Робота з API і стилізація
 - [x] №5 Хуки useContext, useRef, портали
-- [X] №5.1 Error boundary, Error component
-- [ ] №6 Кастомні хуки та memory leak
+- [x] №5.1 Error boundary, Error component
++ [ ] №6 Кастомні хуки та memory leak ⌛
 - [ ] №7 Робота з формами
 - [ ] №8 Мемоізація
 - [ ] №9 Оптимізація

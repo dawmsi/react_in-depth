@@ -16,7 +16,6 @@ export function createReducer<TState>(
   return function (state: TState, action: Action) {
     state ??= initialState;
     const handler = handlers[action.type];
-
     return handler?.(state, action) ?? state;
   };
 }
