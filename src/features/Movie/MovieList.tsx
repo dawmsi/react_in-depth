@@ -1,21 +1,14 @@
 import { useContext, useEffect } from 'react';
 import MovieCard from './MovieCard';
-import { connect } from 'react-redux';
-import { RootState } from '../../store';
-import { Movie, fetchMovies } from '../../reducers/movies';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { fetchMovies } from '../../reducers/movies';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppRedux';
 import { Container, Grid, LinearProgress } from '@mui/material';
 import { AnonymousUser, AuthContext } from '../../AppContext';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
-interface MoviesProps {
-  movies: Movie[];
-  loading: boolean;
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-function Movies({ movies, loading }: MoviesProps) {
+function Movies() {
   const dispatch = useAppDispatch();
+  const { top: movies, loading } = useAppSelector((state) => state.movies);
 
   const { user } = useContext(AuthContext);
   const loggedIn = user !== AnonymousUser;
@@ -62,12 +55,4 @@ function Movies({ movies, loading }: MoviesProps) {
   );
 }
 
-const mapStateToProps = (state: RootState) => ({
-  movies: state.movies.top,
-  loading: state.movies.loading,
-});
-
-const connector = connect(mapStateToProps);
-
-// eslint-disable-next-line react-refresh/only-export-components
-export default connector(Movies);
+export default Movies;
