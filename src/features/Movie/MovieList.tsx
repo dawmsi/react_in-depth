@@ -1,56 +1,53 @@
 import { useContext, useEffect } from 'react';
+
 import MovieCard from './MovieCard';
-import { fetchMovies } from '../../reducers/movies';
-import { useAppDispatch, useAppSelector } from '../../hooks/useAppRedux';
-import { Container, Grid, LinearProgress } from '@mui/material';
-import { AnonymousUser, AuthContext } from '../../AppContext';
+
+import { Container, Grid, LinearProgress, Typography } from '@mui/material';
+
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppRedux';
+import { fetchNextPage } from '../../reducers/moviesSlice';
+import { AnonymousUser, AuthContext } from '../../AppContext';
 
 function Movies() {
   const dispatch = useAppDispatch();
-  const { top: movies, loading } = useAppSelector((state) => state.movies);
+  const movies = useAppSelector((state) => state.movies.top);
+  const loading = useAppSelector((state) => state.movies.loading);
+  const hasMorePages = useAppSelector((state) => state.movies.hasMorePages);
 
-  const { user } = useContext(AuthContext);
-  const loggedIn = user !== AnonymousUser;
-
+  const auth = useContext(AuthContext);
+  const loggedIn = auth.user !== AnonymousUser;
   const [targetRef, entry] = useIntersectionObserver();
 
   useEffect(() => {
-    if (entry?.isIntersecting) {
-      dispatch(fetchMovies());
+    if (entry?.isIntersecting && hasMorePages) {
+      dispatch(fetchNextPage());
     }
-  }, [dispatch, entry?.isIntersecting]);
+  }, [dispatch, entry?.isIntersecting, hasMorePages]);
 
   return (
-    <Container sx={{ px: 8 }} maxWidth="xl">
-      {loading ? (
-        <div className="w-full flex justify-center items-center p-3">
-          <span className="animate-spin text-2xl">{`M`}</span>
-        </div>
-      ) : (
-        <>
-          <Grid container spacing={4}>
-            {movies.map(
-              ({ title, popularity, overview, poster_path, id = 0 }, index) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={`${index}${id}`}>
-                  <MovieCard
-                    key={'card' + id}
-                    id={id}
-                    title={title}
-                    popularity={popularity}
-                    overview={overview}
-                    poster_path={poster_path}
-                    enableUserActions={loggedIn}
-                  />
-                </Grid>
-              )
-            )}
+    <Container sx={{ py: 8 }} maxWidth="lg">
+      <Typography variant="h4" align="center" gutterBottom>
+        Now playing
+      </Typography>
+      <Grid container spacing={4}>
+        {movies.map((m) => (
+          <Grid item key={m.id} xs={12} sm={6} md={4}>
+            <MovieCard
+              key={m.id}
+              id={m.id}
+              title={m.title}
+              overview={m.overview}
+              popularity={m.popularity}
+              image={m.image}
+              enableUserActions={loggedIn}
+            />
           </Grid>
-          <div ref={targetRef}>
-            <LinearProgress color="secondary" sx={{ mt: 3 }} />
-          </div>
-        </>
-      )}
+        ))}
+      </Grid>
+      <div ref={targetRef}>
+        {loading && <LinearProgress color="secondary" sx={{ mt: 3 }} />}
+      </div>
     </Container>
   );
 }

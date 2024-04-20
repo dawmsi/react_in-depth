@@ -7,7 +7,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { Movie } from '../../reducers/movies';
+import { Movie } from '../../reducers/moviesSlice';
 import { Link as RouterLink } from 'react-router-dom';
 import { Favorite } from '@mui/icons-material';
 
@@ -20,16 +20,12 @@ const MovieCard = ({
   title,
   popularity,
   overview,
-  poster_path,
+  image,
   enableUserActions,
 }: MovieProps) => {
   return (
     <Card>
-      <CardMedia
-        component="div"
-        sx={{ pt: '99%' }}
-        image={`${import.meta.env.VITE_MEDIA}` + poster_path}
-      />
+      <CardMedia component="div" sx={{ pt: '99%' }} image={image} />
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography
           variant="h5"

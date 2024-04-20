@@ -1,32 +1,67 @@
-import { Movie } from '../reducers/movies';
+import configuration from '../configuration';
+
+const apiBasePath = `${configuration.apiUrl}/3`;
 
 async function get<TBody>(relativeUrl: string): Promise<TBody> {
-  const options = {
+  const headers = new Headers();
+  headers.append('Accept', 'application/json');
+  headers.append('Authorization', `Bearer ${configuration.apiToken}`);
+
+  const requestOptions = {
     method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-    },
+    headers: headers,
   };
 
-  const responce = await fetch(
-    `${import.meta.env.VITE_API}${relativeUrl}`,
-    options
-  );
-  const json: TBody = await responce.json();
-  return json;
+  const response = await fetch(`${apiBasePath}${relativeUrl}`, requestOptions);
+  const value: TBody = await response.json();
+  return value;
 }
 
-interface PageResponce<TResult> {
+interface PageResponse<TResult> {
   page: number;
   results: TResult[];
+  total_pages: number;
+  total_results: number;
 }
 
-export const client = {
-  async getNowPlaying(): Promise<Movie[]> {
-    const responce = await get<PageResponce<Movie>>(
-      '/3/movie/now_playing?language=en-US&page=1'
+interface MovieDetails {
+  id: number;
+  title: string;
+  overview: string;
+  popularity: number;
+  poster_path?: string | null;
+}
+
+interface PageDetails<T> {
+  results: T[];
+  page: number;
+  totalPages: number;
+}
+
+interface Configuration {
+  images: {
+    base_url: string;
+  };
+}
+
+interface ITmbdClient {
+  getConfiguration: () => Promise<Configuration>;
+  getNowPlaying: (page: number) => Promise<PageDetails<MovieDetails>>;
+}
+
+export const client: ITmbdClient = {
+  getConfiguration: async () => {
+    const response = await get<Configuration>('/configuration');
+    return response;
+  },
+  getNowPlaying: async (page: number = 1) => {
+    const response = await get<PageResponse<MovieDetails>>(
+      `/movie/now_playing?page=${page}`
     );
-    return responce.results;
+    return {
+      results: response.results,
+      totalPages: response.total_pages,
+      page: response.page,
+    };
   },
 };
