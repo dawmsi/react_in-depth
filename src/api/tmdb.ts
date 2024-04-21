@@ -32,23 +32,17 @@ interface MovieDetails {
   poster_path?: string | null;
 }
 
-/* interface PageDetails<T> {
+interface PageDetails<T> {
   results: T[];
   page: number;
   totalPages: number;
-} */
+}
 
 interface Configuration {
   images: {
     base_url: string;
   };
 }
-/* 
-interface ITmbdClient {
-  getConfiguration: () => Promise<Configuration>;
-  getNowPlaying: (page: number) => Promise<PageDetails<MovieDetails>>;
-  getKeywords: (query: string) => Promise<PageDetails<MovieDetails>>;
-} */
 
 export interface KeywordItem {
   id: number;
@@ -57,25 +51,44 @@ export interface KeywordItem {
 
 export interface MoviesFilters {
   keywords?: number[];
+  genres?: number[];
 }
 
-export const client = {
+interface ITmbdClient {
+  getConfiguration: () => Promise<Configuration>;
+  getNowPlaying: (page: number) => Promise<PageDetails<MovieDetails>>;
+  getMovies: (
+    page: number,
+    filters: MoviesFilters
+  ) => Promise<PageDetails<MovieDetails>>;
+  getKeywords: (query: string) => Promise<KeywordItem[]>;
+}
+
+export const client: ITmbdClient = {
   getConfiguration: async () => {
     const response = await get<Configuration>('/configuration');
+
     return response;
   },
   getNowPlaying: async (page: number = 1) => {
     const response = await get<PageResponse<MovieDetails>>(
       `/movie/now_playing?page=${page}`
     );
+
     return {
       results: response.results,
       totalPages: response.total_pages,
       page: response.page,
     };
   },
+  getKeywords: async (query: string) => {
+    const response = await get<PageResponse<KeywordItem>>(
+      `/search/keyword?query=${query}`
+    );
 
-  async getMovies(page: number, filters: MoviesFilters) {
+    return response.results;
+  },
+  getMovies: async (page: number, filters: MoviesFilters) => {
     const params = new URLSearchParams({
       page: page.toString(),
     });
@@ -84,22 +97,19 @@ export const client = {
       params.append('with_keywords', filters.keywords.join('|'));
     }
 
-    const query = params.toString();
+    if (filters.genres?.length) {
+      params.append('with_genres', filters.genres.join(','));
+    }
 
+    const query = params.toString();
     const response = await get<PageResponse<MovieDetails>>(
       `/discover/movie?${query}`
     );
+
     return {
       results: response.results,
       totalPages: response.total_pages,
       page: response.page,
     };
-  },
-
-  async getKeywords(query: string) {
-    const response = await get<PageResponse<KeywordItem>>(
-      `/search/keyword?query=${query}`
-    );
-    return response.results;
   },
 };

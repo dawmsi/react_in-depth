@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { MoviesFilters, client } from '../api/tmdb';
 import { ActionWithPayload, createReducer } from '../redux/utils';
 import { AppThunk } from '../store';
+import { genres } from '../features/Movie/genres';
 
 export interface Movie {
   id: number;
@@ -9,7 +9,11 @@ export interface Movie {
   overview: string;
   popularity: number;
   image?: string;
-  poster_path?: string;
+}
+
+export interface Genre {
+  id: number;
+  name: string;
 }
 
 interface MoviesState {
@@ -17,6 +21,7 @@ interface MoviesState {
   top: Movie[];
   page: number;
   hasMorePages: boolean;
+  genres: Genre[];
 }
 
 const initialState: MoviesState = {
@@ -24,26 +29,27 @@ const initialState: MoviesState = {
   top: [],
   page: 0,
   hasMorePages: true,
+  genres,
 };
 
-const loading = () => {
+function loading() {
   return {
     type: 'movies/loading',
   };
-};
+}
 
-const loaded = (movies: Movie[], page: number, hasMorePages: boolean) => {
+function loaded(movies: Movie[], page: number, hasMorePages: boolean) {
   return {
     type: 'movies/loaded',
     payload: { movies, page, hasMorePages },
   };
-};
+}
 
-export const resetMovies = () => {
+export function resetMovies() {
   return {
     type: 'movies/reset',
   };
-};
+}
 
 export function fetchNextPage(
   filters: MoviesFilters = {}
@@ -63,9 +69,9 @@ function fetchPage(
     dispatch(loading());
 
     const configuration = await client.getConfiguration(); // todo: single load per app
-    const moviewResponse = await client.getMovies(page, filters);
+    const moviesResponse = await client.getMovies(page, filters);
     const imageSize = 'w780';
-    const movies: Movie[] = moviewResponse.results.map((movie) => ({
+    const movies: Movie[] = moviesResponse.results.map((movie) => ({
       id: movie.id,
       title: movie.title,
       overview: movie.overview,
@@ -75,7 +81,7 @@ function fetchPage(
         : undefined,
     }));
 
-    const hasMorePages = moviewResponse.page < moviewResponse.totalPages;
+    const hasMorePages = moviesResponse.page < moviesResponse.totalPages;
 
     dispatch(loaded(movies, page, hasMorePages));
   };
@@ -107,21 +113,3 @@ const moviesReducer = createReducer<MoviesState>(initialState, {
 });
 
 export default moviesReducer;
-
-/* 
-const moviesReducer: Reducer<MoviesState, ActionWithPayload<Movie[]>> = (
-  state,
-  action
-) => {
-  const currentState = state ?? initialState;
-
-  switch (action.type) {
-    case "movies/loaded":
-      return {
-        ...currentState,
-        top: action.payload,
-      };
-    default:
-      return currentState;
-  }
-}; */

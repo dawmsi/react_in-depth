@@ -4,9 +4,7 @@ import MovieList from '../features/Movie/MovieList';
 const Movies = () => {
   return (
     <>
-      <Typography variant="h3" sx={{ mb: 1 }}>
-        Movies
-      </Typography>
+      <Typography variant="h3">Movies</Typography>
       <MovieList />
     </>
   );

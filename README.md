@@ -9,7 +9,7 @@
 - [x] №5 Хуки useContext, useRef, портали
 - [x] №5.1 Error boundary, Error component
 - [x] №6 Кастомні хуки та memory leak ⌛
-+ [ ] №7 Робота з формами
+- [x] №7 Робота з формами
 - [ ] №8 Мемоізація
 - [ ] №9 Оптимізація
 - [ ] №10 Redux Toolkit, RTK Query
