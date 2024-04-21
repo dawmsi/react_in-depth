@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { client } from '../api/tmdb';
+import { MoviesFilters, client } from '../api/tmdb';
 import { ActionWithPayload, createReducer } from '../redux/utils';
 import { AppThunk } from '../store';
 
@@ -26,35 +26,46 @@ const initialState: MoviesState = {
   hasMorePages: true,
 };
 
-function loading() {
+const loading = () => {
   return {
     type: 'movies/loading',
   };
-}
+};
 
-function loaded(movies: Movie[], page: number, hasMorePages: boolean) {
+const loaded = (movies: Movie[], page: number, hasMorePages: boolean) => {
   return {
     type: 'movies/loaded',
     payload: { movies, page, hasMorePages },
   };
-}
+};
 
-export function fetchNextPage(): AppThunk<Promise<void>> {
+export const resetMovies = () => {
+  return {
+    type: 'movies/reset',
+  };
+};
+
+export function fetchNextPage(
+  filters: MoviesFilters = {}
+): AppThunk<Promise<void>> {
   return async (dispatch, getState) => {
     const state = getState();
     const nextPage = state.movies.page + 1;
-    dispatch(fetchPage(nextPage));
+    dispatch(fetchPage(nextPage, filters));
   };
 }
 
-function fetchPage(page: number): AppThunk<Promise<void>> {
+function fetchPage(
+  page: number,
+  filters: MoviesFilters
+): AppThunk<Promise<void>> {
   return async (dispatch) => {
     dispatch(loading());
 
     const configuration = await client.getConfiguration(); // todo: single load per app
-    const nowPlaying = await client.getNowPlaying(page);
+    const moviewResponse = await client.getMovies(page, filters);
     const imageSize = 'w780';
-    const movies: Movie[] = nowPlaying.results.map((movie) => ({
+    const movies: Movie[] = moviewResponse.results.map((movie) => ({
       id: movie.id,
       title: movie.title,
       overview: movie.overview,
@@ -64,7 +75,7 @@ function fetchPage(page: number): AppThunk<Promise<void>> {
         : undefined,
     }));
 
-    const hasMorePages = nowPlaying.page < nowPlaying.totalPages;
+    const hasMorePages = moviewResponse.page < moviewResponse.totalPages;
 
     dispatch(loaded(movies, page, hasMorePages));
   };
@@ -89,6 +100,9 @@ const moviesReducer = createReducer<MoviesState>(initialState, {
       hasMorePages: action.payload.hasMorePages,
       loading: false,
     };
+  },
+  'movies/reset': () => {
+    return { ...initialState };
   },
 });
 
