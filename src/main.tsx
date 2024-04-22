@@ -12,7 +12,7 @@ import Home from './routes/Home.tsx';
 import About from './routes/About.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './store.ts';
+import store from './store/index.ts';
 import ErrorBoundary from './ErrorBoundary.tsx';
 import { LinearProgress } from '@mui/material';
 

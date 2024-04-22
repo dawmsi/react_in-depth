@@ -12,8 +12,8 @@
 - [x] №7 Робота з формами
 - [x] №8 Мемоізація 
 - [x] №9 Оптимізація 
-+ [ ] №10 Redux Toolkit, RTK Query ⌛
-- [ ] №11 Практика 2. Міграція на RTK Query
+- [x] №10 Redux Toolkit, RTK Query 
++ [ ] №11 Практика 2. Міграція на RTK Query ⌛
 - [ ] №12 GraphQL (0:37:30)
 - [ ] №13 JWT token, авторизація, приватні та публічні маршрути
 - [ ] №14 Server-side Rendering

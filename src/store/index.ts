@@ -1,6 +1,6 @@
 import { UnknownAction, applyMiddleware, createStore } from 'redux';
 
-import rootReducer from './reducers';
+import rootReducer from '../reducers';
 import { ThunkAction, thunk } from 'redux-thunk';
 import { composeWithDevTools } from '@redux-devtools/extension';
 
