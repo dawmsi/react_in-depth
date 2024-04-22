@@ -8,7 +8,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import Home from './routes/Home.tsx';
-import Movies from './routes/Movies.tsx';
 import About from './routes/About.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -32,7 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/movies',
-        element: <Movies />,
+        lazy: () => import('./routes/Movies.tsx'),
       },
       {
         path: '/about',

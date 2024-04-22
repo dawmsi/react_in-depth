@@ -1,13 +1,14 @@
 import { Typography } from '@mui/material';
 import MovieList from '../features/Movie/MovieList';
 
-const Movies = () => {
+// router lazy load function
+export function Component() {
   return (
     <>
       <Typography variant="h3">Movies</Typography>
       <MovieList />
     </>
   );
-};
+}
 
-export default Movies;
+Component.displayName = 'Movies';
