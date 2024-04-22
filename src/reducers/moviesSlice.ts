@@ -88,9 +88,6 @@ function fetchPage(
 }
 
 const moviesReducer = createReducer<MoviesState>(initialState, {
-  'movies/loading': (state) => {
-    return { ...state, loading: true };
-  },
   'movies/loaded': (
     state,
     action: ActionWithPayload<{
@@ -106,6 +103,9 @@ const moviesReducer = createReducer<MoviesState>(initialState, {
       hasMorePages: action.payload.hasMorePages,
       loading: false,
     };
+  },
+  'movies/loading': (state) => {
+    return { ...state, loading: true };
   },
   'movies/reset': () => {
     return { ...initialState };

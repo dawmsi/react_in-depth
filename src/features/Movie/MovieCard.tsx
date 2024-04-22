@@ -10,11 +10,14 @@ import {
 import { Movie } from '../../reducers/moviesSlice';
 import { Link as RouterLink } from 'react-router-dom';
 import { Favorite } from '@mui/icons-material';
+import { memo } from 'react';
 
 interface MovieProps extends Movie {
   enableUserActions?: boolean;
+  onAddFavorite?(id: number): void;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 const MovieCard = ({
   id,
   title,
@@ -22,7 +25,10 @@ const MovieCard = ({
   overview,
   image,
   enableUserActions,
+  onAddFavorite,
 }: MovieProps) => {
+  console.count('MovieCard');
+
   return (
     <Card>
       <CardMedia component="div" sx={{ pt: '99%' }} image={image} />
@@ -48,7 +54,10 @@ const MovieCard = ({
           </Button>
           {enableUserActions && (
             <Tooltip title="Add to favorite">
-              <Button>
+              <Button
+                onClick={() => {
+                  onAddFavorite?.(id);
+                }}>
                 <Favorite />
               </Button>
             </Tooltip>
@@ -59,4 +68,6 @@ const MovieCard = ({
   );
 };
 
-export default MovieCard;
+const memoizeComponent = memo(MovieCard);
+
+export default memoizeComponent;

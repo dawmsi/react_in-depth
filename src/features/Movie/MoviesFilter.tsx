@@ -9,12 +9,12 @@ import {
   Paper,
   TextField,
   debounce,
-} from "@mui/material";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import { useMemo, useState } from "react";
-import { KeywordItem, client } from "../../api/tmdb";
-import { Controller, useForm } from "react-hook-form";
-import { useAppSelector } from "../../hooks/useAppRedux";
+} from '@mui/material';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import { useMemo, useState } from 'react';
+import { KeywordItem, client } from '../../api/tmdb';
+import { Controller, useForm } from 'react-hook-form';
+import { useAppSelector } from '../../hooks/useAppRedux';
 
 export interface Filters {
   keywords: KeywordItem[];
@@ -38,27 +38,31 @@ export function MoviesFilter({ onApply }: MoviesFilterProps) {
 
   const genres = useAppSelector((state) => state.movies.genres);
 
-  const fetchKeywords = useMemo(
-    () =>
-      debounce(async (query) => {
-        if (query) {
-          setKeywordsLoading(true);
+  const fetchKeywordOptions = async (query: string) => {
+    if (query) {
+      setKeywordsLoading(true);
 
-          const options = await client.getKeywords(query);
+      const options = await client.getKeywords(query);
 
-          setKeywordsLoading(false);
-          setKeywordsOptions(options);
-        } else {
-          setKeywordsOptions([]);
-        }
-      }, 1000),
+      setKeywordsLoading(false);
+      setKeywordsOptions(options);
+    } else {
+      setKeywordsOptions([]);
+    }
+  };
+
+  const debounceFetchKeywords = useMemo(
+    () => debounce(fetchKeywordOptions, 1000),
     []
   );
 
   return (
     <Paper sx={{ m: 2, p: 0.5 }}>
       <form onSubmit={handleSubmit(onApply)}>
-        <FormControl sx={{ m: 2, display: "block" }} component="fieldset" variant="standard">
+        <FormControl
+          sx={{ m: 2, display: 'block' }}
+          component="fieldset"
+          variant="standard">
           <Controller
             name="keywords"
             control={control}
@@ -73,13 +77,18 @@ export function MoviesFilter({ onApply }: MoviesFilterProps) {
                 onChange={(_, value) => onChange(value)}
                 value={value}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
-                onInputChange={(_, value) => fetchKeywords(value)}
-                renderInput={(params) => <TextField {...params} label="Keywords" />}
+                onInputChange={(_, value) => debounceFetchKeywords(value)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Keywords" />
+                )}
               />
             )}
           />
         </FormControl>
-        <FormControl sx={{ m: 2, display: "block" }} component="fieldset" variant="standard">
+        <FormControl
+          sx={{ m: 2, display: 'block' }}
+          component="fieldset"
+          variant="standard">
           <FormLabel component="legend">Genres</FormLabel>
           <FormGroup sx={{ maxHeight: 500 }}>
             <Controller
@@ -99,7 +108,11 @@ export function MoviesFilter({ onApply }: MoviesFilterProps) {
                             if (checked) {
                               field.onChange([...field.value, valueNumber]);
                             } else {
-                              field.onChange(field.value.filter((value) => value !== valueNumber));
+                              field.onChange(
+                                field.value.filter(
+                                  (value) => value !== valueNumber
+                                )
+                              );
                             }
                           }}
                         />
@@ -112,7 +125,12 @@ export function MoviesFilter({ onApply }: MoviesFilterProps) {
             />
           </FormGroup>
         </FormControl>
-        <Button type="submit" sx={{ m: 2 }} variant="contained" startIcon={<FilterAltOutlinedIcon />} disabled={!formState.isDirty}>
+        <Button
+          type="submit"
+          sx={{ m: 2 }}
+          variant="contained"
+          startIcon={<FilterAltOutlinedIcon />}
+          disabled={!formState.isDirty}>
           Apply filter
         </Button>
       </form>
