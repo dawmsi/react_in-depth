@@ -8,10 +8,10 @@
 - [x] №4 Практика 1. Робота з API і стилізація
 - [x] №5 Хуки useContext, useRef, портали
 - [x] №5.1 Error boundary, Error component
-- [x] №6 Кастомні хуки та memory leak ⌛
+- [x] №6 Кастомні хуки та memory leak
 - [x] №7 Робота з формами
-+ [ ] №8 Мемоізація ⌛
-- [ ] №9 Оптимізація
+- [x] №8 Мемоізація 
++ [ ] №9 Оптимізація ⌛
 - [ ] №10 Redux Toolkit, RTK Query
 - [ ] №11 Практика 2. Міграція на RTK Query
 - [ ] №12 GraphQL (0:37:30)
