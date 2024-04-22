@@ -62,7 +62,7 @@ function MoviesList() {
   //wrap in Suspense to indicate module is loading
   return (
     <Grid container spacing={2} sx={{ flexWrap: 'nowrap' }}>
-      <Grid item xs="auto">
+      <Grid item xs="auto" sx={{ minWidth: '389px' }}>
         <Suspense fallback={<span>Loading Filters</span>}>
           <MoviesFilter
             onApply={(filters) => {
