@@ -1,4 +1,11 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import { Container, Grid, LinearProgress, Typography } from '@mui/material';
 
@@ -8,15 +15,15 @@ import MovieCard from './MovieCard';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppRedux';
 import { fetchNextPage, resetMovies } from '../../reducers/moviesSlice';
 import { AnonymousUser, AuthContext } from '../../AppContext';
-import { Filters, MoviesFilter } from './MoviesFilter';
 
-function Movies() {
+function MoviesList() {
   const dispatch = useAppDispatch();
   const movies = useAppSelector((state) => state.movies.top);
   const loading = useAppSelector((state) => state.movies.loading);
   const hasMorePages = useAppSelector((state) => state.movies.hasMorePages);
 
-  const [filters, setFilters] = useState<Filters>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [filters, setFilters] = useState<any>();
 
   const auth = useContext(AuthContext);
   const loggedIn = auth.user !== AnonymousUser;
@@ -30,7 +37,8 @@ function Movies() {
     if (entry?.isIntersecting && hasMorePages) {
       const moviesFilters = filters
         ? {
-            keywords: filters?.keywords.map((k) => k.id),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            keywords: filters?.keywords.map((k: any) => k.id),
             genres: filters?.genres,
           }
         : undefined;
@@ -48,15 +56,21 @@ function Movies() {
     [auth.user.name]
   );
 
+  //lazy load/dynamic import
+  //default export is required
+  const MoviesFilter = lazy(() => import('./MoviesFilter'));
+  //wrap in Suspense to indicate module is loading
   return (
     <Grid container spacing={2} sx={{ flexWrap: 'nowrap' }}>
       <Grid item xs="auto">
-        <MoviesFilter
-          onApply={(filters) => {
-            dispatch(resetMovies());
-            setFilters(filters);
-          }}
-        />
+        <Suspense fallback={<span>Loading Filters</span>}>
+          <MoviesFilter
+            onApply={(filters) => {
+              dispatch(resetMovies());
+              setFilters(filters);
+            }}
+          />
+        </Suspense>
       </Grid>
       <Grid item xs={12}>
         <Container sx={{ py: 8 }} maxWidth="lg">
@@ -89,4 +103,4 @@ function Movies() {
   );
 }
 
-export default Movies;
+export default MoviesList;

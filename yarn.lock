@@ -536,7 +536,7 @@
 
 "@redux-devtools/extension@^3.3.0":
   version "3.3.0"
-  resolved "https://registry.npmjs.org/@redux-devtools/extension/-/extension-3.3.0.tgz"
+  resolved "https://registry.yarnpkg.com/@redux-devtools/extension/-/extension-3.3.0.tgz#bc775d289f15604c472112920beac2cf4dbb7907"
   integrity sha512-X34S/rC8S/M1BIrkYD1mJ5f8vlH0BDqxXrs96cvxSBo4FhMdbhU+GUGsmNYov1xjSyLMHgo8NYrUG8bNX7525g==
   dependencies:
     "@babel/runtime" "^7.23.2"
@@ -1540,7 +1540,7 @@ ignore@^5.2.0, ignore@^5.3.1:
 
 immutable@^4.3.4:
   version "4.3.5"
-  resolved "https://registry.npmjs.org/immutable/-/immutable-4.3.5.tgz"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.3.5.tgz#f8b436e66d59f99760dc577f5c99a4fd2a5cc5a0"
   integrity sha512-8eabxkth9gZatlwl5TBuJnCsoTADlL6ftEr7A4qgdaTsPyreilDSnUk57SO+jfKcNtxPa22U5KK6DSeAYhpBJw==
 
 import-fresh@^3.2.1:
