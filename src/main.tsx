@@ -4,15 +4,20 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './index.css';
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import Home from './routes/Home.tsx';
+
 import About from './routes/About.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store.ts';
 import ErrorBoundary from './ErrorBoundary.tsx';
+import { LinearProgress } from '@mui/material';
+
+// eslint-disable-next-line react-refresh/only-export-components
+const Movies = lazy(() => import('./routes/Movies.tsx'));
 
 const router = createBrowserRouter([
   {
@@ -31,7 +36,12 @@ const router = createBrowserRouter([
       },
       {
         path: '/movies',
-        lazy: () => import('./routes/Movies.tsx'),
+        element: (
+          <Suspense
+            fallback={<LinearProgress color="warning" sx={{ mt: 1 }} />}>
+            <Movies />
+          </Suspense>
+        ),
       },
       {
         path: '/about',
