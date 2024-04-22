@@ -7,10 +7,17 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { Movie } from '../../reducers/moviesSlice';
 import { Link as RouterLink } from 'react-router-dom';
 import { Favorite } from '@mui/icons-material';
 import { memo } from 'react';
+
+export interface Movie {
+  id: number;
+  title: string;
+  overview: string;
+  popularity: number;
+  image?: string;
+}
 
 interface MovieProps extends Movie {
   enableUserActions?: boolean;

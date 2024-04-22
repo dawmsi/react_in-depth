@@ -1,80 +1,82 @@
-import {
-  Suspense,
-  lazy,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import {  useCallback, useContext, useState } from 'react';
 
 import { Container, Grid, LinearProgress, Typography } from '@mui/material';
 
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
 import MovieCard from './MovieCard';
-import { useAppDispatch, useAppSelector } from '../../hooks/useAppRedux';
-import { fetchNextPage, resetMovies } from '../../reducers/moviesSlice';
+/* import { useAppDispatch } from '../../hooks/useAppRedux';
+import { fetchNextPage, resetMovies } from '../../reducers/moviesSlice'; */
 import { AnonymousUser, AuthContext } from '../../AppContext';
+import {
+  MoviesFilters,
+  MoviesQuery,
+  useGetConfigurationQuery,
+  useGetMoviesQuery,
+} from '../../services/rtk-tmdb';
+import MoviesFilter from './MoviesFilter';
+
+const initialQuery: MoviesQuery = {
+  page: 1,
+  filters: {},
+};
 
 function MoviesList() {
-  const dispatch = useAppDispatch();
-  const movies = useAppSelector((state) => state.movies.top);
-  const loading = useAppSelector((state) => state.movies.loading);
-  const hasMorePages = useAppSelector((state) => state.movies.hasMorePages);
+  const [query, setQuery] = useState<MoviesQuery>(initialQuery);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [filters, setFilters] = useState<any>();
+  const { data: configuration } = useGetConfigurationQuery();
+  const { data, isFetching } = useGetMoviesQuery(query);
 
-  const auth = useContext(AuthContext);
-  const loggedIn = auth.user !== AnonymousUser;
-  const [targetRef, entry] = useIntersectionObserver();
+  const movies = data?.results ?? [];
 
-  useEffect(() => {
-    dispatch(resetMovies());
-  }, [dispatch]);
+  const hasMorePages = data?.hasMorePages;
 
-  useEffect(() => {
-    if (entry?.isIntersecting && hasMorePages) {
-      const moviesFilters = filters
-        ? {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            keywords: filters?.keywords.map((k: any) => k.id),
-            genres: filters?.genres,
-          }
-        : undefined;
+  const imageSize = 'w780';
 
-      dispatch(fetchNextPage(moviesFilters));
+  function formatImageUrl(path?: string) {
+    return path && configuration
+      ? `${configuration?.images.base_url}${imageSize}${path}`
+      : undefined;
+  }
+
+  const { user } = useContext(AuthContext);
+  const loggedIn = user !== AnonymousUser;
+
+  const onIntersect = useCallback(() => {
+    if (hasMorePages) {
+      setQuery((q) => ({ ...q, page: q.page + 1 }));
     }
-  }, [dispatch, entry?.isIntersecting, filters, hasMorePages]);
+  }, [hasMorePages]);
+
+  const [targetRef] = useIntersectionObserver({ onIntersect });
 
   const handleAddFavorite = useCallback(
     (id: number) => {
-      alert(
-        `Not implemented ${auth.user.name} is adding movie ${id} to favorite!`
-      );
+      alert(`Not implemented ${user.name} is adding movie ${id} to favorite!`);
     },
-    [auth.user.name]
+    [user.name]
   );
 
   //lazy load/dynamic import
   //default export is required
-  const MoviesFilter = lazy(() => import('./MoviesFilter'));
+
   //wrap in Suspense to indicate module is loading
   return (
     <Grid container spacing={2} sx={{ flexWrap: 'nowrap' }}>
       <Grid item xs="auto" sx={{ minWidth: '389px' }}>
-        <Suspense fallback={<span>Loading Filters</span>}>
           <MoviesFilter
             onApply={(filters) => {
-              dispatch(resetMovies());
-              setFilters(filters);
+              const moviesFilters: MoviesFilters = {
+                keywords: filters.keywords.map((k) => k.id),
+                genres: filters.genres,
+              };
+              setQuery({ page: 1, filters: moviesFilters });
             }}
           />
-        </Suspense>
       </Grid>
       <Grid item xs={12}>
         <Container sx={{ py: 8 }} maxWidth="lg">
-          {!loading && !movies.length && (
+          {!isFetching && !movies.length && (
             <Typography variant="h6">
               No movies were found that match your query.
             </Typography>
@@ -87,7 +89,7 @@ function MoviesList() {
                   title={m.title}
                   overview={m.overview}
                   popularity={m.popularity}
-                  image={m.image}
+                  image={formatImageUrl(m.poster_path)}
                   enableUserActions={loggedIn}
                   onAddFavorite={handleAddFavorite}
                 />
@@ -95,7 +97,7 @@ function MoviesList() {
             ))}
           </Grid>
           <div ref={targetRef}>
-            {loading && <LinearProgress color="secondary" sx={{ mt: 3 }} />}
+            {isFetching && <LinearProgress color="secondary" sx={{ mt: 3 }} />}
           </div>
         </Container>
       </Grid>

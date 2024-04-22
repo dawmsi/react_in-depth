@@ -7,14 +7,19 @@ import {
   FormGroup,
   FormLabel,
   Paper,
+  Skeleton,
   TextField,
   debounce,
 } from '@mui/material';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { useMemo, useState } from 'react';
-import { KeywordItem, client } from '../../api/tmdb';
 import { Controller, useForm } from 'react-hook-form';
-import { useAppSelector } from '../../hooks/useAppRedux';
+
+import {
+  KeywordItem,
+  useGetGenresQuery,
+  useGetKeywordsQuery,
+} from '../../services/rtk-tmdb';
 
 export interface Filters {
   keywords: KeywordItem[];
@@ -26,33 +31,22 @@ interface MoviesFilterProps {
 }
 
 export default function MoviesFilter({ onApply }: MoviesFilterProps) {
-  const { control, handleSubmit, formState } = useForm<Filters>({
+  const [keywordsQuery, setKeywordsQuery] = useState<string>('');
+
+  const { data: keywordsOptions = [], isLoading: keywordsLoading } =
+    useGetKeywordsQuery(keywordsQuery, { skip: !keywordsQuery });
+
+  const { data: genres = [], isLoading: genresLoading } = useGetGenresQuery();
+
+  const { control, handleSubmit } = useForm<Filters>({
     defaultValues: {
       keywords: [],
       genres: [],
     },
   });
 
-  const [keywordsOptions, setKeywordsOptions] = useState<KeywordItem[]>([]);
-  const [keywordsLoading, setKeywordsLoading] = useState(false);
-
-  const genres = useAppSelector((state) => state.movies.genres);
-
-  const fetchKeywordOptions = async (query: string) => {
-    if (query) {
-      setKeywordsLoading(true);
-
-      const options = await client.getKeywords(query);
-
-      setKeywordsLoading(false);
-      setKeywordsOptions(options);
-    } else {
-      setKeywordsOptions([]);
-    }
-  };
-
   const debounceFetchKeywords = useMemo(
-    () => debounce(fetchKeywordOptions, 1000),
+    () => debounce((query: string) => setKeywordsQuery(query), 1000),
     []
   );
 
@@ -89,48 +83,53 @@ export default function MoviesFilter({ onApply }: MoviesFilterProps) {
           sx={{ m: 2, display: 'block' }}
           component="fieldset"
           variant="standard">
-          <FormLabel component="legend">Genres</FormLabel>
-          <FormGroup sx={{ maxHeight: 500 }}>
-            <Controller
-              name="genres"
-              control={control}
-              render={({ field }) => (
-                <>
-                  {genres.map((genre) => (
-                    <FormControlLabel
-                      key={genre.id}
-                      control={
-                        <Checkbox
-                          value={genre.id}
-                          checked={field.value.includes(genre.id)}
-                          onChange={(event, checked) => {
-                            const valueNumber = Number(event.target.value);
-                            if (checked) {
-                              field.onChange([...field.value, valueNumber]);
-                            } else {
-                              field.onChange(
-                                field.value.filter(
-                                  (value) => value !== valueNumber
-                                )
-                              );
-                            }
-                          }}
+          {genresLoading ? (
+            <Skeleton width={300} height={480} />
+          ) : (
+            <>
+              <FormLabel component="legend">Genres</FormLabel>
+              <FormGroup sx={{ maxHeight: 500 }}>
+                <Controller
+                  name="genres"
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      {genres.map((genre) => (
+                        <FormControlLabel
+                          key={genre.id}
+                          control={
+                            <Checkbox
+                              value={genre.id}
+                              checked={field.value.includes(genre.id)}
+                              onChange={(event, checked) => {
+                                const valueNumber = Number(event.target.value);
+                                if (checked) {
+                                  field.onChange([...field.value, valueNumber]);
+                                } else {
+                                  field.onChange(
+                                    field.value.filter(
+                                      (value) => value !== valueNumber
+                                    )
+                                  );
+                                }
+                              }}
+                            />
+                          }
+                          label={genre.name}
                         />
-                      }
-                      label={genre.name}
-                    />
-                  ))}
-                </>
-              )}
-            />
-          </FormGroup>
+                      ))}
+                    </>
+                  )}
+                />
+              </FormGroup>
+            </>
+          )}
         </FormControl>
         <Button
           type="submit"
           sx={{ m: 2 }}
           variant="contained"
-          startIcon={<FilterAltOutlinedIcon />}
-          disabled={!formState.isDirty}>
+          startIcon={<FilterAltOutlinedIcon />}>
           Apply filter
         </Button>
       </form>

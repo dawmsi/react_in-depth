@@ -10,6 +10,7 @@ import LiveTvOutlinedIcon from '@mui/icons-material/LiveTvOutlined';
 import Navigation from './routes/Navigation';
 import { useContext } from 'react';
 import { AnonymousUser, AuthContext } from './AppContext';
+import { Link } from 'react-router-dom';
 
 interface AuthSectionProps {
   onLogin(): void;
@@ -27,7 +28,7 @@ const AppHeader = ({ onLogin, onLogout }: AuthHeaderProps) => {
       <Container maxWidth="xl">
         <Toolbar component="nav">
           <LiveTvOutlinedIcon sx={{ mr: 2 }} />
-          <Typography variant="h6" color="inherit">
+          <Typography component={Link} to={'/'} variant="h6" color="inherit">
             React Adven
           </Typography>
           <Stack

@@ -1,16 +1,20 @@
-import { UnknownAction, applyMiddleware, createStore } from 'redux';
+import { UnknownAction } from 'redux';
 
-import rootReducer from '../reducers';
-import { ThunkAction, thunk } from 'redux-thunk';
-import { composeWithDevTools } from '@redux-devtools/extension';
+import { ThunkAction } from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
+import { tmdbApi } from '../services/rtk-tmdb';
+import { setupListeners } from '@reduxjs/toolkit/query';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-function configureStore() {
-  const composedEnhancer = composeWithDevTools(applyMiddleware(thunk));
-  const store = createStore(rootReducer, composedEnhancer);
-  return store;
-}
+const store = configureStore({
+  reducer: {
+    [tmdbApi.reducerPath]: tmdbApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(tmdbApi.middleware),
+});
 
-const store = configureStore();
+setupListeners(store.dispatch);
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
@@ -20,5 +24,8 @@ export type AppThunk<ReturnType> = ThunkAction<
   undefined,
   UnknownAction
 >;
+// from hooks
+export const useAppDispatch = useDispatch<AppDispatch>;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export default store;
