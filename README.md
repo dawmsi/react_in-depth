@@ -15,6 +15,6 @@
 - [x] №10 Redux Toolkit, RTK Query
 - [x] №11 Практика 2. Міграція на RTK Query
 - [x] №12 GraphQL
-- [ ] №13 JWT token, авторизація, приватні та публічні маршрути ⌛
-- [ ] №14 Server-side Rendering
+- [x] №13 JWT token, авторизація, приватні та публічні маршрути
+- [ ] №14 Server-side Rendering ⌛
 - [ ] №15 Тестування компонентів

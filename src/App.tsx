@@ -7,9 +7,7 @@ import {
 } from '@mui/material';
 
 import { deepPurple } from '@mui/material/colors';
-import AppHeader from './AppHeader';
-import { AnonymousUser, AuthContext, AuthInfo } from './AppContext';
-import { useState } from 'react';
+import { AppHeader } from './features/Header/AppHeader';
 
 const defaultTheme = createTheme({
   palette: {
@@ -18,26 +16,13 @@ const defaultTheme = createTheme({
 });
 
 const App = () => {
-  const [auth, setAuth] = useState<AuthInfo>({ user: AnonymousUser });
-
-  const fakeAuth = {
-    user: {
-      name: 'Matiew',
-    },
-  };
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <AuthContext.Provider value={auth}>
-        <AppHeader
-          onLogin={() => setAuth(fakeAuth)}
-          onLogout={() => setAuth({ user: AnonymousUser })}
-        />
-        <Container component="main" sx={{ p: 2, mt: '64px' }}>
-          <Outlet />
-        </Container>
-      </AuthContext.Provider>
+      <AppHeader />
+      <Container component="main" sx={{ p: 2, mt: '64px' }}>
+        <Outlet />
+      </Container>
     </ThemeProvider>
   );
 };

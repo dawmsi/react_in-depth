@@ -15,6 +15,11 @@ import { Provider } from 'react-redux';
 import store from './store/index.ts';
 import ErrorBoundary from './ErrorBoundary.tsx';
 import { LinearProgress } from '@mui/material';
+import { StatefulAuthProvider } from './auth/StatefulAuthProvider.tsx';
+import AuthCallback from './auth/AuthCallback.tsx';
+import { Profile } from './features/Profile/Profile.tsx';
+import { AuthenticationGuard } from './auth/AuthenticationGuard.tsx';
+import { Protected } from './features/Protected/Protected.tsx';
 
 // eslint-disable-next-line react-refresh/only-export-components
 const Movies = lazy(() => import('./routes/Movies.tsx'));
@@ -25,11 +30,13 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <Provider store={store}>
-        <ErrorBoundary>
-          <App />
-        </ErrorBoundary>
-      </Provider>
+      <StatefulAuthProvider>
+        <Provider store={store}>
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
+        </Provider>
+      </StatefulAuthProvider>
     ),
     children: [
       {
@@ -37,7 +44,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/movies',
+        path: 'movies',
         element: (
           <Suspense
             fallback={<LinearProgress color="warning" sx={{ mt: 1 }} />}>
@@ -55,8 +62,20 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/about',
+        path: 'about',
         element: <About />,
+      },
+      {
+        path: 'callback',
+        element: <AuthCallback />,
+      },
+      {
+        path: 'profile',
+        element: <AuthenticationGuard component={Profile} />,
+      },
+      {
+        path: 'protected',
+        element: <AuthenticationGuard component={Protected} />,
       },
     ],
   },

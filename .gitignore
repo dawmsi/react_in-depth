@@ -24,6 +24,7 @@ typings/
 
 #Env
 .env
+.env.local
 
 # Optional eslint cache
 .eslintcache

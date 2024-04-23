@@ -1,12 +1,10 @@
 import { Box, Button, Container, Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
-import { AnonymousUser, AuthContext } from '../AppContext';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Home = () => {
-  const { user } = useContext(AuthContext);
-  const loggedIn = user !== AnonymousUser;
-  const greeting = loggedIn ? `Hi ${user.name}!` : `Hi ghost!`;
+  const { user, isAuthenticated } = useAuth0();
+  const greeting = isAuthenticated ? `Hi ${user?.name}!` : `Hi guest!`;
 
   return (
     <Box sx={{ py: 8 }}>
