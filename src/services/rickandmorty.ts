@@ -3,10 +3,7 @@ import { graphqlRequestBaseQuery } from '@rtk-query/graphql-request-base-query';
 import { gql } from 'graphql-request';
 
 interface pageInfo {
-  count: number;
-  pages: number;
-  next?: string;
-  prev?: string;
+  next: number;
 }
 
 interface EpisodesResponse {
@@ -51,10 +48,7 @@ export const rickandmortyApi = createApi({
             query GetEpisodesPage($page: Int) {
               episodes(page: $page) {
                 info {
-                  count
-                  pages
                   next
-                  prev
                 }
                 results {
                   name

@@ -12,6 +12,7 @@ const defaultQuery = { page: 1 };
 export default function Extra() {
   const [query, setQuery] = useState<EpisodesQuery>(defaultQuery);
   const { data, isFetching } = useGetEpisodesQuery(query);
+  console.log(data);
 
   return (
     <Container sx={{ py: 3 }} maxWidth="xl">
