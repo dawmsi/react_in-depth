@@ -19,7 +19,7 @@ import { StatefulAuthProvider } from './auth/StatefulAuthProvider.tsx';
 import AuthCallback from './auth/AuthCallback.tsx';
 import { Profile } from './features/Profile/Profile.tsx';
 import { AuthenticationGuard } from './auth/AuthenticationGuard.tsx';
-import { Protected } from './features/Protected/Protected.tsx';
+import { Protected } from './routes/protected/Protected.tsx';
 
 // eslint-disable-next-line react-refresh/only-export-components
 const Movies = lazy(() => import('./routes/Movies.tsx'));
