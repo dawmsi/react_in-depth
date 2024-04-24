@@ -17,7 +17,7 @@ export default function Extra() {
   return (
     <Container sx={{ py: 3 }} maxWidth="xl">
       <Pager
-        hasNextPage={data && data.info.next !== null}
+        hasNextPage={data && data.info?.next !== null}
         current={query.page}
         onNext={() => setQuery((q) => ({ ...q, page: q.page + 1 }))}
         onPrev={() => setQuery((q) => ({ ...q, page: q.page - 1 }))}

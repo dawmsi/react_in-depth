@@ -40,11 +40,7 @@ const MovieCard = ({
     <Card>
       <CardMedia component="div" sx={{ pt: '99%' }} image={image} />
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography
-          variant="h5"
-          className="text-ellipsis text-nowrap max-w-full overflow-hidden">
-          {title}
-        </Typography>
+        <Typography variant="h5">{title}</Typography>
         <Typography variant="body2" color="text.secondary">
           {overview}
         </Typography>
